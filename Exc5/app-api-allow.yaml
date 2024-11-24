@@ -9,8 +9,14 @@ spec:
             role: back-end-api
     policyTypes:
         - Ingress
+        - Egress
     ingress:
         - from:
+              - podSelector:
+                    matchLabels:
+                        role: front-end
+    egress:
+        - to:
               - podSelector:
                     matchLabels:
                         role: front-end

@@ -23,16 +23,35 @@ create_user() {
 create_user "namespace1-admin-user" "admin-namespace1"
 create_user "namespace1-developer-user" "developers-namespace1"
 
+create_user "cluster-admin-user" "devops-admin"
+create_user "cluster-edit-user" "devops"
+create_user "cluster-view-user" "devops-readonly"
+
 kubectl create namespace namespace1
 
 kubectl apply -f secrets-only-role.yaml
 kubectl apply -f namespace-admin-role.yaml
+kubectl apply -f admin-cluster-role.yaml
+kubectl apply -f edit-cluster-role.yaml
+kubectl apply -f view-cluster-role.yaml
 
 kubectl apply -f secrets-only-rolebinding.yaml
 kubectl apply -f namespace-admin-rolebinding.yaml
+kubectl apply -f admin-cluster-rolebinding.yaml
+kubectl apply -f edit-cluster-rolebinding.yaml
+kubectl apply -f view-cluster-rolebinding.yaml
 
 # Создаём контексты для админа неймспейса
 kubectl config set-context namespace1-admin-context --cluster=minikube --namespace=namespace1 --user=namespace1-admin-user
 
 # Создаём контексты для разработчика неймспейса
 kubectl config set-context namespace1-developer-context --cluster=minikube --namespace=namespace1 --user=namespace1-developer-user
+
+# Создаём контексты для админа кластера
+kubectl config set-context cluster-admin-context --cluster=minikube --user=cluster-admin-user
+
+# Создаём контексты для редактора кластера
+kubectl config set-context cluster-edit-context --cluster=minikube --user=cluster-edit-user
+
+# Создаём контексты для просмотра кластера
+kubectl config set-context cluster-view-context --cluster=minikube --user=cluster-view-user
